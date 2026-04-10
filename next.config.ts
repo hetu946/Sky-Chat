@@ -15,10 +15,8 @@ const nextConfig: NextConfig = {
       './node_modules/.prisma/**',
       './node_modules/@prisma/client/libquery_engine*',
       './node_modules/.pnpm/**', // pnpm 依赖存储目录
-      // 源代码和开发文件
-      './**/*.ts', // 保留 .tsx 和 .js/.mjs 即可
+      // 排除开发文件和文档
       './**/*.map',
-      './**/*.json', // 保留必要的 .json
       './**/README*',
       './**/CHANGELOG*',
       './**/LICENSE*',

@@ -15,30 +15,41 @@ import { prisma } from '@/server/db/client'
 
 export const authOptions: NextAuthOptions = {
   adapter: PrismaAdapter(prisma),
-  
+
   providers: [
-    GoogleProvider({
-      clientId: process.env.GOOGLE_CLIENT_ID!,
-      clientSecret: process.env.GOOGLE_CLIENT_SECRET!,
-      authorization: {
-        params: {
-          prompt: 'select_account',
-          access_type: 'offline',
-          response_type: 'code',
-        },
-      },
-    }),
-    
-    GitHubProvider({
-      clientId: process.env.GITHUB_CLIENT_ID!,
-      clientSecret: process.env.GITHUB_CLIENT_SECRET!,
-      authorization: {
-        params: {
-          prompt: 'consent',
-        },
-      },
-    }),
-    
+    // 只有配置了环境变量时才启用 Google OAuth
+    ...(process.env.GOOGLE_CLIENT_ID && process.env.GOOGLE_CLIENT_SECRET
+      ? [
+          GoogleProvider({
+            clientId: process.env.GOOGLE_CLIENT_ID,
+            clientSecret: process.env.GOOGLE_CLIENT_SECRET,
+            authorization: {
+              params: {
+                prompt: 'select_account',
+                access_type: 'offline',
+                response_type: 'code',
+              },
+            },
+          }),
+        ]
+      : []),
+
+    // 只有配置了环境变量时才启用 GitHub OAuth
+    ...(process.env.GITHUB_CLIENT_ID && process.env.GITHUB_CLIENT_SECRET
+      ? [
+          GitHubProvider({
+            clientId: process.env.GITHUB_CLIENT_ID,
+            clientSecret: process.env.GITHUB_CLIENT_SECRET,
+            authorization: {
+              params: {
+                prompt: 'consent',
+              },
+            },
+          }),
+        ]
+      : []),
+
+    // 邮箱密码登录（始终启用）
     CredentialsProvider({
       name: 'credentials',
       credentials: {

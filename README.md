@@ -4,10 +4,10 @@ AI 聊天应用，支持多模型对话、语音交互、文件上传。
 
 ## 技术栈
 
-- **框架**: Next.js 16 (App Router + Turbopack)
+- **框架**: Next.js 15 (App Router)
 - **语言**: TypeScript
 - **数据库**: PostgreSQL + Prisma ORM
-- **认证**: Auth.js v5 (Google/GitHub/邮箱登录)
+- **认证**: NextAuth.js v4 (Google/GitHub/邮箱登录)
 - **状态管理**: Zustand
 - **UI**: Tailwind CSS + shadcn/ui
 - **AI**: 硅基流动 API (对话/语音/思考模式)
@@ -51,25 +51,33 @@ pnpm install
 
 ### 配置
 
-创建 `.env.local`：
+复制 `.env.example` 为 `.env.local` 并填写配置：
 
 ```bash
-# 数据库
-DATABASE_URL="postgresql://user:password@localhost:5432/skychat"
+cp .env.example .env.local
+```
 
-# Auth.js
-AUTH_SECRET="your-secret-key"
+主要配置项：
+
+```bash
+# 数据库（本地开发使用 Docker）
+DATABASE_URL="postgresql://skychat:password123@127.0.0.1:5433/skychat"
+
+# Auth.js（生产环境必须使用强随机密钥）
+AUTH_SECRET="your-strong-secret-key-here"
 AUTH_TRUST_HOST="true"
 
-# OAuth
-AUTH_GOOGLE_ID="your-google-client-id"
-AUTH_GOOGLE_SECRET="your-google-client-secret"
-AUTH_GITHUB_ID="your-github-client-id"
-AUTH_GITHUB_SECRET="your-github-client-secret"
+# OAuth（可选，不配置则只能使用邮箱登录）
+GOOGLE_CLIENT_ID="your-google-client-id"
+GOOGLE_CLIENT_SECRET="your-google-client-secret"
+GITHUB_CLIENT_ID="your-github-client-id"
+GITHUB_CLIENT_SECRET="your-github-client-secret"
 
 # 硅基流动 API
 SILICONFLOW_API_KEY="your-api-key"
 ```
+
+> **提示：** Vercel 部署时需要在项目设置中配置环境变量，不要将 `.env.local` 提交到 Git。
 
 ### 数据库
 
