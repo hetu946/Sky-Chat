@@ -19,6 +19,7 @@ export interface MonitorEvent {
 
 export interface ErrorReplayEvent {
     type: string
+    timestamp: number
     errorMessage?: string
     payload?: AnyRecord
 }
