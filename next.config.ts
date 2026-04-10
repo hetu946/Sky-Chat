@@ -6,6 +6,16 @@ const withBundleAnalyzer = bundleAnalyzer({
 })
 
 const nextConfig: NextConfig = {
+  // 排除 Prisma 多余的二进制文件，减小 Serverless Function 体积
+  outputFileTracingExcludes: {
+    '*': [
+      './node_modules/@prisma/engines/**',
+      './node_modules/prisma/libquery_engine*',
+      './node_modules/@prisma/client/libquery_engine*',
+      './node_modules/.pnpm/@prisma+engines*/**/*.node',
+    ],
+  },
+
   images: {
     remotePatterns: [
       {
