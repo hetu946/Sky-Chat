@@ -54,4 +54,6 @@ prisma/migrations/
 .kiro
 .pnpm-store
 .test-data
+# generated files
+generated/
 public/generated/
