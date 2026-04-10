@@ -45,6 +45,7 @@ next-env.d.ts
 # cursor
 .cursor/
 /lib/generated/prisma
+/generated/
 
 # Windsurf
 prisma/migrations/
@@ -54,6 +55,4 @@ prisma/migrations/
 .kiro
 .pnpm-store
 .test-data
-# generated files
-generated/
 public/generated/
