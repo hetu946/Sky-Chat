@@ -1,13 +1,36 @@
 type AnyRecord = Record<string, unknown>
 
+export interface ToolResult {
+    toolCallId?: string
+    success: boolean
+    imageUrl?: string
+    width?: number
+    height?: number
+    resultCount?: number
+    sources?: Array<{ title: string; url: string; snippet?: string }>
+    error?: string
+}
+
 export interface Trace {
     traceId: string
     aiMessageId: string
     previousTraceId?: string
+    start(): void
+    complete(): void
+    error(msg: string): void
+    abort(reason: string): void
+    firstChunk(): void
+    recordChunk(): void
+    phaseStart(phase: string): void
+    phaseEnd(phase: string): void
+    toolStart(name: string, args?: AnyRecord, toolCallId?: string): void
+    toolEnd(name: string, result: ToolResult): void
 }
 
 export interface Session {
     sessionId: string
+    incrementTraceCount(): void
+    incrementToolUsage(name: string): void
 }
 
 export interface MonitorEvent {
