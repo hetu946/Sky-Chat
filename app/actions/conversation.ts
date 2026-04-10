@@ -42,7 +42,7 @@ export async function getConversations(): Promise<ActionResult<ConversationData[
     const userId = await getCurrentUserId()
     const conversations = await ConversationRepository.findByUserId(userId)
     // 转换日期为字符串
-    const data = conversations.map((c) => ({
+    const data = conversations.map((c: (typeof conversations)[number]) => ({
       ...c,
       createdAt: c.createdAt.toISOString(),
       updatedAt: c.updatedAt.toISOString(),
@@ -170,13 +170,13 @@ export async function toggleConversationPin(
 ): Promise<ActionResult<ConversationData>> {
   try {
     const userId = await getCurrentUserId()
-    
+
     // 先验证会话属于当前用户
     const existing = await ConversationRepository.findById(id, userId)
     if (!existing) {
       return { success: false, error: '会话不存在' }
     }
-    
+
     const conversation = await ConversationRepository.togglePin(id, isPinned)
 
     await audit({
