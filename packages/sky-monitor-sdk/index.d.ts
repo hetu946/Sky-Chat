@@ -1,4 +1,3 @@
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
 type AnyRecord = Record<string, unknown>
 
 export interface Trace {
@@ -9,6 +8,19 @@ export interface Trace {
 
 export interface Session {
     sessionId: string
+}
+
+export interface MonitorEvent {
+    id: string
+    type: string
+    timestamp: number
+    data: AnyRecord
+}
+
+export interface ErrorReplayEvent {
+    type: string
+    errorMessage?: string
+    payload?: AnyRecord
 }
 
 export interface IMonitor {
