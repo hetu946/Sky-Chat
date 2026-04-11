@@ -92,8 +92,8 @@ docs/**
 .husky/**
 !.husky/_/.gitkeep
 
-# 本地监控 SDK - 在 Vercel 上使用云端版本
-../sky-monitor-sdk
+# 本地监控 SDK
 sky-monitor-sdk
+sky-monitor-sdk/**
 packages/sky-monitor-sdk
 packages/sky-monitor-sdk/**

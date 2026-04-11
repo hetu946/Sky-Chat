@@ -2,7 +2,7 @@
  * 调试面板类型定义
  */
 
-import type { MonitorEvent } from '@jerry_aurora/sky-monitor-sdk'
+import type { MonitorEvent } from '@/lib/sky-monitor-sdk'
 
 /** Trace 数据 */
 export interface TraceData {

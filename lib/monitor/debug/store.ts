@@ -11,7 +11,7 @@ import type {
   VitalsData,
   TabType,
 } from './types'
-import type { ErrorReplayEvent } from '@jerry_aurora/sky-monitor-sdk'
+import type { ErrorReplayEvent } from '@/lib/sky-monitor-sdk'
 
 interface DebugStore {
   // ========== 状态 ==========

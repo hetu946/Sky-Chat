@@ -12,7 +12,7 @@
 
 import { useEffect, useState, useCallback, useRef } from 'react'
 import { useDebugStore } from '../store'
-import type { MonitorEvent, ErrorReplayEvent } from '@jerry_aurora/sky-monitor-sdk'
+import type { MonitorEvent, ErrorReplayEvent } from '@/lib/sky-monitor-sdk'
 
 /** DebugPlugin 接口 */
 interface IDebugPlugin {

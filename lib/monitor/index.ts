@@ -19,7 +19,7 @@ import {
   BrowserStorage,
   BrowserTransport,
   DebugPlugin,
-} from '@jerry_aurora/sky-monitor-sdk'
+} from '@/lib/sky-monitor-sdk'
 import type { MonitorWithPlugins } from './types'
 
 let monitor: MonitorWithPlugins | null = null
