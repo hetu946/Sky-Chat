@@ -1,23 +1,33 @@
 import type { NextConfig } from 'next'
 import bundleAnalyzer from '@next/bundle-analyzer'
+import path from 'path'
 
 const withBundleAnalyzer = bundleAnalyzer({
   enabled: process.env.ANALYZE === 'true',
 })
 
 const nextConfig: NextConfig = {
-  // 开启文件追踪 - Vercel 专用
-  outputFileTracing: true,
+  // 修复 pnpm monorepo workspace root 检测
+  outputFileTracingRoot: path.join(__dirname, '../'),
 
   // 排除大文件和不必要的依赖，减小 Serverless Function 体积（应用到所有路由）
   outputFileTracingExcludes: {
     '/**': [
-      // Prisma 引擎文件 - 使用外部包方式加载
+      // Prisma 引擎文件 - 标准路径
       '**/node_modules/@prisma/engines/**',
       '**/node_modules/prisma/**',
       '**/node_modules/.prisma/**',
       '**/node_modules/@prisma/client/libquery_engine-*',
       '**/node_modules/@prisma/client/generator-build/**',
+      // Prisma 引擎文件 - pnpm 虚拟存储路径（关键！）
+      '**/node_modules/.pnpm/@prisma+client@*/**/node_modules/.prisma/**',
+      '**/node_modules/.pnpm/@prisma+engines@*/**',
+      '**/node_modules/.pnpm/prisma@*/**',
+      // Windows/macOS Prisma 引擎二进制（Vercel 只需要 Linux 版本）
+      '**/*.dll.node',
+      '**/*darwin*',
+      '**/*win32*',
+      '**/*windows*',
 
       // pnpm 虚拟存储目录 - Vercel 上不需要
       '**/node_modules/.pnpm/**',
