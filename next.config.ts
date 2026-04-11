@@ -68,9 +68,11 @@ const nextConfig: NextConfig = {
       '**/node_modules/@babel/**',
       '**/node_modules/.eslintcache',
 
-      // highlight.js 只在客户端使用
+      // highlight.js 只在客户端使用（通过 CDN 加载样式）
       '**/node_modules/highlight.js/**',
       '**/node_modules/highlightjs/**',
+      // pnpm 虚拟存储中的 highlight.js
+      '**/.pnpm/highlight.js@*/**',
 
       // markdown 相关库 - 使用动态导入
       '**/node_modules/remark-gfm/**',
