@@ -23,21 +23,31 @@ interface ChartData {
   values: number[]
 }
 
-interface ChartComponents {
-  BarChart: React.ComponentType<{ data: unknown[]; children?: React.ReactNode }>
-  Bar: React.ComponentType<{ dataKey: string; fill?: string; radius?: number[] }>
-  LineChart: React.ComponentType<{ data: unknown[]; children?: React.ReactNode }>
-  Line: React.ComponentType<{ type?: string; dataKey: string; stroke?: string; strokeWidth?: number; dot?: unknown }>
-  XAxis: React.ComponentType<{ dataKey: string; tick?: unknown; className?: string }>
-  YAxis: React.ComponentType<{ tick?: unknown; className?: string }>
-  CartesianGrid: React.ComponentType<{ strokeDasharray?: string; className?: string }>
-  Tooltip: React.ComponentType<{ contentStyle?: React.CSSProperties; labelStyle?: React.CSSProperties; formatter?: (value: number) => [number, string] }>
-  ResponsiveContainer: React.ComponentType<{ width: string; height: number; children: React.ReactNode }>
+// recharts 组件的简化类型定义
+type RechartsComponents = {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  BarChart: any
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  Bar: any
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  LineChart: any
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  Line: any
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  XAxis: any
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  YAxis: any
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  CartesianGrid: any
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  Tooltip: any
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  ResponsiveContainer: any
 }
 
 // 动态加载 recharts（recharts 体积 50MB+，必须按需加载）
 function useRecharts() {
-  const [components, setComponents] = useState<ChartComponents | null>(null)
+  const [components, setComponents] = useState<RechartsComponents | null>(null)
   const [isLoading, setIsLoading] = useState(true)
 
   useEffect(() => {
@@ -54,7 +64,7 @@ function useRecharts() {
         ResponsiveContainer: m.ResponsiveContainer,
       })),
     ]).then(c => {
-      setComponents(c[0])
+      setComponents(c[0] as RechartsComponents)
       setIsLoading(false)
     })
   }, [])
