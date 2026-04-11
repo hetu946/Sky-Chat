@@ -12,20 +12,51 @@
  * @module components/MessageContent
  */
 
-import { useMemo } from 'react'
-import ReactMarkdown from 'react-markdown'
-import remarkGfm from 'remark-gfm'
-import rehypeHighlight from 'rehype-highlight'
-import rehypeRaw from 'rehype-raw'
+import { useMemo, useState, useEffect } from 'react'
 import { createMarkdownComponents } from './MarkdownComponents'
+
+// 动态导入重型 markdown 依赖，避免打包进 serverless function
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+type ReactMarkdownType = React.ComponentType<any>
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+type PluginType = any
+
+interface MarkdownDeps {
+  ReactMarkdown: ReactMarkdownType
+  remarkGfm: PluginType
+  rehypeHighlight: PluginType
+  rehypeRaw: PluginType
+}
+
+function useMarkdownDeps(): MarkdownDeps | null {
+  const [deps, setDeps] = useState<MarkdownDeps | null>(null)
+
+  useEffect(() => {
+    Promise.all([
+      import('react-markdown'),
+      import('remark-gfm'),
+      import('rehype-highlight'),
+      import('rehype-raw'),
+    ]).then(([md, gfm, highlight, raw]) => {
+      setDeps({
+        ReactMarkdown: md.default,
+        remarkGfm: gfm.default,
+        rehypeHighlight: highlight.default,
+        rehypeRaw: raw.default,
+      })
+    })
+  }, [])
+
+  return deps
+}
 
 interface MessageContentProps {
   /** 消息内容（Markdown 格式） */
   content: string
-  
+
   /** 是否正在流式传输 */
   isStreaming?: boolean
-  
+
   /** 是否禁用媒体块渲染（用于 thinking 面板） */
   disableMediaBlocks?: boolean
 }
@@ -43,36 +74,36 @@ interface MessageContentProps {
  */
 function preprocessStreamingContent(content: string, isStreaming: boolean): string {
   if (!isStreaming || !content) return content
-  
+
   // 统计代码块的开始和结束
   const codeBlockPattern = /```/g
   const matches = content.match(codeBlockPattern)
   const count = matches?.length || 0
-  
+
   // 如果没有代码块或代码块数量是偶数（都闭合了），直接返回
   if (count === 0 || count % 2 === 0) {
     return content
   }
-  
+
   // 有未闭合的代码块
   const lastOpenBlock = content.lastIndexOf('```')
   const afterBlock = content.slice(lastOpenBlock + 3)
   const langMatch = afterBlock.match(/^(\w+)/)
   const lang = langMatch?.[1]
-  
+
   // 如果是媒体块，需要特殊处理
   if (lang && ['image', 'chart', 'weather'].includes(lang)) {
     const blockContent = afterBlock.slice(lang.length).trim()
-    
+
     // 检查是否有完整的 JSON
     const jsonStart = blockContent.indexOf('{')
     const jsonEnd = blockContent.lastIndexOf('}')
-    
+
     // JSON 不完整，隐藏整个代码块
     if (jsonStart === -1 || jsonEnd === -1 || jsonEnd < jsonStart) {
       return content.slice(0, lastOpenBlock)
     }
-    
+
     // 尝试解析 JSON
     const jsonStr = blockContent.slice(jsonStart, jsonEnd + 1)
     try {
@@ -84,7 +115,7 @@ function preprocessStreamingContent(content: string, isStreaming: boolean): stri
       return content.slice(0, lastOpenBlock)
     }
   }
-  
+
   // 普通代码块，补上闭合标记
   return content + '\n```'
 }
@@ -100,18 +131,31 @@ export function MessageContent({
   isStreaming = false,
   disableMediaBlocks = false,
 }: MessageContentProps) {
+  const deps = useMarkdownDeps()
+
   // 根据流式状态创建 markdown 组件
   const markdownComponents = useMemo(
     () => createMarkdownComponents(isStreaming, disableMediaBlocks),
     [isStreaming, disableMediaBlocks]
   )
-  
+
   // 预处理内容：流式时延迟渲染未闭合的代码块
   const processedContent = useMemo(
     () => preprocessStreamingContent(content, isStreaming),
     [content, isStreaming]
   )
-  
+
+  // 依赖未加载时显示纯文本，避免布局跳动
+  if (!deps) {
+    return (
+      <div className="prose prose-sm dark:prose-invert max-w-none whitespace-pre-wrap">
+        {processedContent}
+      </div>
+    )
+  }
+
+  const { ReactMarkdown, remarkGfm, rehypeHighlight, rehypeRaw } = deps
+
   return (
     <div className="prose prose-sm dark:prose-invert max-w-none">
       <ReactMarkdown

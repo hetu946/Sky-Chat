@@ -130,6 +130,26 @@ const nextConfig: NextConfig = {
   serverExternalPackages: [
     '@prisma/client',
     'prisma',
+    // markdown/rehype 生态 - 服务端 SSR 用到，但体积大，外部化避免打包进 serverless function
+    'remark',
+    'remark-gfm',
+    'remark-html',
+    'remark-parse',
+    'rehype',
+    'rehype-highlight',
+    'rehype-raw',
+    'rehype-stringify',
+    'rehype-parse',
+    'unified',
+    'mdast-util-from-markdown',
+    'mdast-util-to-hast',
+    'mdast-util-gfm',
+    'micromark',
+    'micromark-extension-gfm',
+    'hast-util-to-html',
+    'hast-util-raw',
+    'lowlight',
+    'highlight.js',
   ],
 
   images: {
