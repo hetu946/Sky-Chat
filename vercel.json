@@ -1,6 +1,6 @@
 {
   "$schema": "https://openapi.vercel.sh/vercel.json",
-  "buildCommand": "pnpm prisma generate && pnpm build && npx tsx scripts/vercel-cleanup.ts",
+  "buildCommand": "pnpm prisma generate && pnpm build && rm -rf node_modules/.pnpm/*@next* node_modules/.pnpm/*darwin* node_modules/.pnpm/*win32* node_modules/.pnpm/*freebsd* node_modules/.pnpm/*arm64* 2>/dev/null || true",
   "installCommand": "pnpm install --frozen-lockfile",
   "framework": "nextjs",
   "regions": ["iad1"],
