@@ -1,15 +1,11 @@
 import type { NextConfig } from 'next'
 import bundleAnalyzer from '@next/bundle-analyzer'
-import path from 'path'
 
 const withBundleAnalyzer = bundleAnalyzer({
   enabled: process.env.ANALYZE === 'true',
 })
 
 const nextConfig: NextConfig = {
-  // 修复 pnpm monorepo workspace root 检测
-  outputFileTracingRoot: path.join(__dirname, '../'),
-
   // 排除大文件和不必要的依赖，减小 Serverless Function 体积（应用到所有路由）
   outputFileTracingExcludes: {
     '/**': [
