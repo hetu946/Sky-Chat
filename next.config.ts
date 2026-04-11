@@ -14,7 +14,15 @@ const nextConfig: NextConfig = {
       './node_modules/prisma/**',
       './node_modules/.prisma/**',
       './node_modules/@prisma/client/libquery_engine*',
-      './node_modules/.pnpm/**', // pnpm 依赖存储目录
+      // 排除 pnpm 虚拟存储目录中的平台无关文件
+      './node_modules/.pnpm/**',
+      // 排除所有平台的 swc 编译文件（只保留 Linux 版本）
+      './node_modules/@next/swc-win32-x64-msvc/**',
+      './node_modules/@next/swc-win32-ia32-msvc/**',
+      './node_modules/@next/swc-darwin-x64/**',
+      './node_modules/@next/swc-darwin-arm64/**',
+      './node_modules/@next/swc-linux-x64-gnu/**',
+      './node_modules/@next/swc-linux-arm64-gnu/**',
       // 排除开发文件和文档
       './**/*.map',
       './**/README*',
