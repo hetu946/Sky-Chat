@@ -39,30 +39,57 @@ export interface ToolResult {
 }
 
 export interface IMonitor {
-    use(plugin: { install?: () => void; [key: string]: unknown }): this;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    use(plugin: { install?: () => void; [key: string]: any }): this;
     track(event: string, data?: Record<string, unknown>): void;
     emit(event: string, data?: Record<string, unknown>): void;
     on(event: string, handler: (...args: unknown[]) => void): void;
     off(event: string, handler: (...args: unknown[]) => void): void;
 }
 
-// Stub implementations
-class NoopMonitor implements IMonitor {
-    use() { return this; }
+// Monitor configuration interface
+interface MonitorConfig {
+    appId?: string;
+    debug?: boolean;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    storage?: any;
+}
+
+// Stub Monitor implementation
+class MonitorClass implements IMonitor {
+    private plugins: unknown[] = [];
+
+    constructor(_config?: MonitorConfig) {
+        // no-op: 配置被忽略
+    }
+
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    use(plugin: { install?: () => void; [key: string]: any }): this {
+        this.plugins.push(plugin);
+        plugin.install?.();
+        return this;
+    }
     track() { }
     emit() { }
     on() { }
     off() { }
 }
 
+// Plugin base classes
 class NoopPlugin {
+    constructor(_options?: Record<string, unknown>) { }
     install() { }
 }
 
-class BrowserStorage { }
-class BrowserTransport { constructor() { } }
+class BrowserStorage {
+    constructor(_options?: Record<string, unknown>) { }
+}
 
-const Monitor = NoopMonitor;
+class BrowserTransport {
+    constructor(_options?: string | Record<string, unknown>) { }
+}
+
+const Monitor = MonitorClass;
 const TracePlugin = NoopPlugin;
 const SessionPlugin = NoopPlugin;
 const TransportPlugin = NoopPlugin;
