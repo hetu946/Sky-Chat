@@ -10,6 +10,7 @@ export interface Trace {
 
 export interface Session {
     sessionId: string;
+    incrementTraceCount(): void;
 }
 
 export interface MonitorEvent {
@@ -87,7 +88,10 @@ class MonitorClass implements IMonitor {
     setCurrentTrace(_trace: Trace) { }
 
     getSession(): Session {
-        return { sessionId: crypto.randomUUID() };
+        return {
+            sessionId: crypto.randomUUID(),
+            incrementTraceCount() { },
+        };
     }
 }
 
