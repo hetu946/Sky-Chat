@@ -226,7 +226,7 @@ export function endTool(
       toolCallId: result.toolCallId ? normalizeToolCallId(result.toolCallId) : undefined,
     }
 
-    trace.toolEnd(name, normalizedResult as ToolResult)
+    trace.toolEnd(name, normalizedResult as unknown as ToolResult)
   } catch (e) {
     console.warn('[TraceHelper] endTool failed:', e)
   }
