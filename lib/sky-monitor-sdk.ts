@@ -6,11 +6,21 @@ export interface Trace {
     aiMessageId: string;
     previousTraceId?: string;
     start(): void;
+    complete(): void;
+    error(message: string): void;
+    abort(reason: string): void;
+    firstChunk(): void;
+    recordChunk(): void;
+    phaseStart(phase: string): void;
+    phaseEnd(phase: string): void;
+    toolStart(name: string, args?: Record<string, unknown>, toolCallId?: string): void;
+    toolEnd(name: string, result: unknown): void;
 }
 
 export interface Session {
     sessionId: string;
     incrementTraceCount(): void;
+    incrementToolUsage(toolName: string): void;
 }
 
 export interface MonitorEvent {
@@ -83,6 +93,15 @@ class MonitorClass implements IMonitor {
             aiMessageId: options.aiMessageId,
             previousTraceId: options.previousTraceId,
             start() { },
+            complete() { },
+            error(_message: string) { },
+            abort(_reason: string) { },
+            firstChunk() { },
+            recordChunk() { },
+            phaseStart(_phase: string) { },
+            phaseEnd(_phase: string) { },
+            toolStart(_name: string, _args?: Record<string, unknown>, _toolCallId?: string) { },
+            toolEnd(_name: string, _result: unknown) { },
         };
     }
 
@@ -98,6 +117,7 @@ class MonitorClass implements IMonitor {
         return {
             sessionId: crypto.randomUUID(),
             incrementTraceCount() { },
+            incrementToolUsage(_toolName: string) { },
         };
     }
 
