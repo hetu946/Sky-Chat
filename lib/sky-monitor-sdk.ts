@@ -37,7 +37,6 @@ export interface ToolResult {
 }
 
 export interface IMonitor {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     use(plugin: { install?: () => void; [key: string]: unknown }): this;
     track(event: string, data?: Record<string, unknown>): void;
     emit(event: string, data?: Record<string, unknown>): void;
