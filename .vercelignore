@@ -33,10 +33,7 @@ generated/*/**
 generated/**/**
 !/generated/.gitkeep
 
-# Prisma 相关 - 服务器端按需加载
-prisma
-prisma/**
-!prisma/schema.prisma
+# Prisma 相关 - 只排除 migrations，构建时需要 schema.prisma
 prisma/migrations
 prisma/migrations/**
 
