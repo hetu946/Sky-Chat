@@ -8,9 +8,6 @@ importers:
 
   .:
     dependencies:
-      '@jerry_aurora/sky-monitor-sdk':
-        specifier: link:./packages/sky-monitor-sdk
-        version: link:packages/sky-monitor-sdk
       '@next-auth/prisma-adapter':
         specifier: 1.0.7
         version: 1.0.7(@prisma/client@6.19.0(prisma@6.19.0(typescript@5.9.3))(typescript@5.9.3))(next-auth@4.24.11(next@15.5.15(react-dom@19.2.0(react@19.2.0))(react@19.2.0))(react-dom@19.2.0(react@19.2.0))(react@19.2.0))
