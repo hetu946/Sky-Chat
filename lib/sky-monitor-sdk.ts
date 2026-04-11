@@ -60,6 +60,7 @@ interface MonitorConfig {
 // Stub Monitor implementation
 class MonitorClass implements IMonitor {
     private plugins: unknown[] = [];
+    private currentTrace: Trace | null = null;
 
     constructor(_config?: MonitorConfig) {
         // no-op: 配置被忽略
@@ -85,7 +86,13 @@ class MonitorClass implements IMonitor {
         };
     }
 
-    setCurrentTrace(_trace: Trace) { }
+    getCurrentTrace(): Trace | null {
+        return this.currentTrace;
+    }
+
+    setCurrentTrace(_trace: Trace | null) {
+        this.currentTrace = _trace;
+    }
 
     getSession(): Session {
         return {
@@ -93,6 +100,9 @@ class MonitorClass implements IMonitor {
             incrementTraceCount() { },
         };
     }
+
+    startSession() { }
+    endSession() { }
 }
 
 // Plugin base classes
