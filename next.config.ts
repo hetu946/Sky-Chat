@@ -9,9 +9,9 @@ const nextConfig: NextConfig = {
   // 开启文件追踪 - Vercel 专用
   outputFileTracing: true,
 
-  // 排除大文件和不必要的依赖，减小 Serverless Function 体积
+  // 排除大文件和不必要的依赖，减小 Serverless Function 体积（应用到所有路由）
   outputFileTracingExcludes: {
-    '/api/**': [
+    '/**': [
       // Prisma 引擎文件 - 使用外部包方式加载
       '**/node_modules/@prisma/engines/**',
       '**/node_modules/prisma/**',
