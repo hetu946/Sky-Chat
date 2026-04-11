@@ -20,8 +20,10 @@ export interface MonitorEvent {
 }
 
 export interface ErrorReplayEvent {
-    type: 'error';
+    type: 'error' | 'error_recorded' | 'replay_scheduled' | 'replay_uploaded';
     timestamp: number;
+    errorMessage?: string;
+    payload?: unknown;
     data: {
         message: string;
         stack?: string;
