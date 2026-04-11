@@ -14,7 +14,7 @@ export interface Session {
 export interface MonitorEvent {
     id: string;
     type: string;
-    timestamp: Date;
+    timestamp: number;
     data: Record<string, unknown>;
     context: Record<string, unknown>;
 }
