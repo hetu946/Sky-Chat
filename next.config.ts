@@ -11,65 +11,125 @@ const nextConfig: NextConfig = {
 
   // 排除大文件和不必要的依赖，减小 Serverless Function 体积
   outputFileTracingExcludes: {
-    '/': [
-      // Prisma 引擎文件 - 运行时动态加载，不需要打包
-      './node_modules/@prisma/engines/**',
-      './node_modules/prisma/**',
-      './node_modules/.prisma/**',
-      './node_modules/@prisma/client/libquery_engine*',
+    '/api/**': [
+      // Prisma 引擎文件 - 使用外部包方式加载
+      '**/node_modules/@prisma/engines/**',
+      '**/node_modules/prisma/**',
+      '**/node_modules/.prisma/**',
+      '**/node_modules/@prisma/client/libquery_engine-*',
+      '**/node_modules/@prisma/client/generator-build/**',
 
-      // pnpm 虚拟存储目录 - 可能包含所有平台的硬链接
-      './node_modules/.pnpm/**',
+      // pnpm 虚拟存储目录 - Vercel 上不需要
+      '**/node_modules/.pnpm/**',
 
-      // 所有非 Linux 平台的 swc 编译文件
-      './node_modules/@next/swc-win32-x64-msvc/**',
-      './node_modules/@next/swc-win32-ia32-msvc/**',
-      './node_modules/@next/swc-darwin-x64/**',
-      './node_modules/@next/swc-darwin-arm64/**',
-      './node_modules/@next/swc-linux-arm64-gnu/**',
-      './node_modules/next/dist/compiled/**',
+      // Windows 和 macOS 的 swc 编译文件（只在 Linux 上运行）
+      '**/node_modules/@next/swc-win32-x64-msvc/**',
+      '**/node_modules/@next/swc-win32-ia32-msvc/**',
+      '**/node_modules/@next/swc-darwin-x64/**',
+      '**/node_modules/@next/swc-darwin-arm64/**',
+      '**/node_modules/@next/swc-linux-arm64-gnu/**',
+      '**/node_modules/@next/swc-linux-arm64-musl/**',
+      '**/node_modules/@next/swc-freebsd-x64/**',
 
-      // recharts 和其他大库 - 使用动态导入，不需打包
-      './node_modules/recharts/**',
-      './node_modules/d3-scale/**',
-      './node_modules/d3-shape/**',
-      './node_modules/d3-time/**',
-      './node_modules/d3-array/**',
+      // recharts 和 d3 相关 - 图表组件使用动态导入
+      '**/node_modules/recharts/**',
+      '**/node_modules/d3-scale/**',
+      '**/node_modules/d3-shape/**',
+      '**/node_modules/d3-time/**',
+      '**/node_modules/d3-array/**',
+      '**/node_modules/d3-color/**',
+      '**/node_modules/d3-interpolate/**',
+      '**/node_modules/d3-path/**',
+      '**/node_modules/d3-time-format/**',
+      '**/node_modules/d3-format/**',
+      '**/node_modules/d3-selection/**',
+      '**/node_modules/d3-transition/**',
+      '**/node_modules/d3-axis/**',
+      '**/node_modules/d3-brush/**',
+      '**/node_modules/d3-contour/**',
+      '**/node_modules/d3-drag/**',
+      '**/node_modules/d3-ease/**',
+      '**/node_modules/d3-polygon/**',
+      '**/node_modules/d3-quadtree/**',
+      '**/node_modules/d3-random/**',
+      '**/node_modules/d3-scale-chromatic/**',
+      '**/node_modules/d3-shape/**',
+      '**/node_modules/internmap/**',
+      '**/node_modules/delaunator/**',
+      '**/node_modules/robust-predicates/**',
+
+      // rrweb-player - 只在客户端使用
+      '**/node_modules/rrweb-player/**',
+      '**/node_modules/rrweb/**',
+
+      // 大型开发工具和测试库
+      '**/node_modules/.cache/**',
+      '**/node_modules/@types/**',
+      '**/node_modules/@babel/**',
+      '**/node_modules/.eslintcache',
+
+      // highlight.js 只在客户端使用
+      '**/node_modules/highlight.js/**',
+      '**/node_modules/highlightjs/**',
+
+      // markdown 相关库 - 使用动态导入
+      '**/node_modules/remark-gfm/**',
+      '**/node_modules/remark-html/**',
+      '**/node_modules/remark-parse/**',
+      '**/node_modules/remark/**',
+      '**/node_modules/unified/**',
+      '**/node_modules/mdast-*/**',
+      '**/node_modules/micromark*/**',
+      '**/node_modules/estree-util-*/**',
+      '**/node_modules/vfile*/**',
+      '**/node_modules/trough/**',
+
+      // rehype 相关
+      '**/node_modules/rehype-raw/**',
+      '**/node_modules/rehype-highlight/**',
+      '**/node_modules/rehype-stringify/**',
+      '**/node_modules/rehype-parse/**',
+      '**/node_modules/hast*/**',
 
       // 开发文件和文档
-      './**/*.map',
-      './**/README*',
-      './**/CHANGELOG*',
-      './**/LICENSE*',
-      './**/HISTORY*',
-      './**/AGENTS.md',
-      './**/CONTRIBUTING.md',
-      './**/DEVELOPING.md',
-      './**/*.md',
+      '**/*.map',
+      '**/README*',
+      '**/CHANGELOG*',
+      '**/LICENSE*',
+      '**/HISTORY*',
+      '**/AGENTS.md',
+      '**/CONTRIBUTING.md',
+      '**/DEVELOPING.md',
+      '**/*.md',
 
       // 测试文件
-      './**/__tests__/**',
-      './**/*.test.ts',
-      './**/*.test.tsx',
-      './**/*.spec.ts',
-      './**/jest.config.*',
+      '**/__tests__/**',
+      '**/*.test.ts',
+      '**/*.test.tsx',
+      '**/*.spec.ts',
+      '**/*.spec.tsx',
+      '**/jest.config.*',
+      '**/vitest.config.*',
 
       // 配置文件
-      './**/.eslintrc*',
-      './**/.prettierrc*',
-      './**/tsconfig*.json',
-      './**/.git/**',
+      '**/.eslintrc*',
+      '**/.prettierrc*',
+      '**/tsconfig*.json',
+      '**/.git/**',
 
       // 其他大文件
-      './**/*.hbs',
-      './**/templates/**',
+      '**/*.hbs',
+      '**/templates/**',
+
+      // 本地包 - Vercel 上不需要
+      '**/packages/sky-monitor-sdk/**',
     ],
   },
 
-  // 指定在服务器端不需要打包的大型依赖
+  // 服务器端需要外部化的包（不打包，直接在运行时加载）
   serverExternalPackages: [
-    'prisma',
     '@prisma/client',
+    'prisma',
   ],
 
   images: {
@@ -90,7 +150,7 @@ const nextConfig: NextConfig = {
   // 生产环境移除 console.log
   compiler: {
     removeConsole: process.env.NODE_ENV === 'production' ? {
-      exclude: ['error', 'warn'], // 保留 console.error 和 console.warn
+      exclude: ['error', 'warn'],
     } : false,
   },
 }
