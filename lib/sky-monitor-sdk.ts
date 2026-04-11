@@ -5,6 +5,7 @@ export interface Trace {
     traceId: string;
     aiMessageId: string;
     previousTraceId?: string;
+    start(): void;
 }
 
 export interface Session {
@@ -73,6 +74,21 @@ class MonitorClass implements IMonitor {
     emit() { }
     on() { }
     off() { }
+
+    createTrace(options: { aiMessageId: string; previousTraceId?: string }): Trace {
+        return {
+            traceId: crypto.randomUUID(),
+            aiMessageId: options.aiMessageId,
+            previousTraceId: options.previousTraceId,
+            start() { },
+        };
+    }
+
+    setCurrentTrace(_trace: Trace) { }
+
+    getSession(): Session {
+        return { sessionId: crypto.randomUUID() };
+    }
 }
 
 // Plugin base classes
